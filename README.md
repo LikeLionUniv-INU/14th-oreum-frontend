@@ -1,120 +1,80 @@
-# ⛰️ [오름]: 대학생활 커리어 네비게이션
-> **멋쟁이사자처럼 인천대학교 14기 미니 해커톤 프로젝트 (프론트엔드)** <br />
-> 막막한 취업 준비 과정을 산맥 등반에 비유하여, 사용자 맞춤형 통계와 성취도를 직관적으로 시각화한 동기부여 서비스 <br/>
+# 오름(Oreum) ⛰️
 
-## 🔗 Links
-- [소개 자료](https://drive.google.com/file/d/1PSVO96uw7UohAeXVdN6iKzYTZn_i9GnI/view?usp=sharing)
-- [배포 링크](https://www.oreumm.site)
-- [백엔드 레포지토리](https://github.com/LikeLionUniv-INU-oreum/oreum-backend)
-  
-<br/>
+대학생의 취업 준비 과정을 산 등반에 비유한 커리어 관리 서비스입니다. 학년과 희망 직무에 따른 비교 통계, 성취도 시각화를 통해 준비 현황을 확인할 수 있습니다.
 
-## 💡 프로젝트 기획 의도
-- **기획 의도**: 대학생들이 취업을 준비하며 겪는 "내 스펙이 다른 사람들에 비해 어느 정도일까?"라는 막막함을 해결하고자 기획했습니다. 희망 직무와 학년을 기준으로 평균 데이터와 내 기록을 비교하고, 달성도를 고도와 깃발 등 게임적인 요소로 시각화하여 지속적인 동기부여를 제공합니다.
-- **개발 기간**: 2026.06.29 ~ 2026.07.13 (2주)
+멋쟁이사자처럼 인천대학교 14기 미니 해커톤 프로젝트 · 2026.06.29 ~ 2026.07.13
 
-<br/>
+## 주요 기능
 
-## 🛠 Tech Stack
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white)
+- **커리어 대시보드:** 학년·희망 직무 기준 비교 통계와 현재 성취도 확인
+- **성취도 시각화:** 고도와 깃발 등 등반 요소로 준비 과정 표현
+- **사용자 정보 관리:** 학적, 희망 직무, 비밀번호 변경
 
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+## 기술 스택
 
-<br/>
+- **Frontend:** React, JavaScript, Vite
+- **Styling:** styled-components
+- **Routing:** React Router
+- **API:** Axios
+- **Animation:** Framer Motion
 
-## 🔥 핵심 문제 해결
-### 1. [Architecture] 브라우저 알림창을 단일 통합 모달 컴포넌트로 리팩토링
-- **문제 상황**: 학적 변경, 직무 설정, 비밀번호 변경 등의 상호작용에서 기본 `alert`를 사용하면 UI/UX가 저해됨. 각각의 기능을 별도의 모달로 만들 경우 코드 중복과 상태 관리의 복잡도 증가 예상.
-- **해결 방안**: `isOpen`과 `type` 상태를 객체로 관리하는 통합 모달 컴포넌트를 설계. 하나의 모달 껍데기 안에서 조건부 렌더링을 통해 내용물만 교체하도록 최적화하고, `styled-components`의 Keyframes를 활용해 등장 애니메이션 추가.
-- **결과**: 불필요한 컴포넌트 중복 생성을 막아 코드 복잡도를 낮추고, 서비스 전반에 걸쳐 통일된 UI/UX를 제공함.
+## 문제 해결 경험
 
-### 2. [Network] 서버 통신 응답 구조 최적화
-- **문제 상황**: 백엔드 API 연동 성공 시에도 후속 로직이 실행되지 않는 문제 발생.
-- **해결 방안**: Axios가 반환하는 Response 객체의 구조를 파악. 성공 데이터 접근 시 `.data` 추출 과정을 명시하고, 에러 핸들링 시 옵셔널 체이닝(`error?.response?.data?.message`)을 적용하여 서버의 실제 에러 메시지를 안전하게 파싱함.
-- **결과**: 프론트-백 간의 데이터 규격 불일치 문제 해결. 서버에서 받아오는 메시지를 올바르게 띄워줌.
+### 공통 모달 컴포넌트
 
-### 2. [Network] 누락 정보 로컬 스토리지 활용
-- **문제 상황**: 코스 리뷰 페이지의 명세서에 희망 직무 정보가 누락되어 해당 페이지 정보 불러오기 불가능.
-- **해결 방안**: 정보 입력 페이지에서 받아오는 희망 직무 정보를 `currentJobId`, `currenJobName`이라는 변수로 로컬 스토리지에 저장. 이후 필요한 페이지에서 활용. 
-- **결과**: 서버 호출 최소화, 기존 데이터를 효율적으로 재활용함.
+- **문제:** 학적·직무·비밀번호 변경 과정에서 기본 브라우저 알림창을 사용하면 화면 경험이 일관되지 않고, 기능별 모달을 각각 만들면 중복 코드가 늘어날 수 있었습니다.
+- **해결:** 열림 상태와 모달 유형을 함께 관리하는 공통 컴포넌트로 구성하고, 유형에 따라 내용을 바꾸도록 구현했습니다.
+- **결과:** 여러 화면에서 동일한 모달 UI를 재사용할 수 있게 했습니다.
 
-<br/>
+### API 응답 및 오류 처리
 
-## ⚡ 주요 기능
+- **문제:** API 요청 성공 이후에도 응답 데이터 접근 방식 때문에 후속 처리가 정상적으로 실행되지 않는 문제가 있었습니다.
+- **해결:** Axios 응답의 `data` 구조를 확인하고, 오류 메시지는 `error?.response?.data?.message`로 안전하게 접근하도록 수정했습니다.
+- **결과:** 서버 응답과 오류 메시지를 화면에 정상적으로 반영할 수 있도록 개선했습니다.
 
-### 1. 나의 학년/직무 비교 통계 대시보드
-- 사용자의 현재 스펙을 희망 직무 평균과 비교하는 동적 그래프 구현.
-- 누적 데이터를 바탕으로 현재 고도, 수집한 깃발 등 데이터 시각화 제공.
+### 화면 간 희망 직무 정보 유지
 
-### 2. 사용자 설정 및 프로필 관리 시스템
-- 현재 비밀번호 확인 프로세스를 포함한 안전한 정보 변경(직무, 학적, 비밀번호) 폼 구현.
-- 변경된 데이터를 즉각적으로 fetch하여 화면에 새로고침 없이 렌더링.
+- **문제:** 코스 리뷰 화면에서 필요한 희망 직무 정보가 API 응답에 포함되지 않았습니다.
+- **해결:** 앞선 입력 단계에서 선택한 직무 정보를 `localStorage`에 저장하고 후속 화면에서 재사용했습니다.
+- **결과:** 화면 이동 후에도 필요한 직무 정보를 사용할 수 있도록 했습니다.
 
-<br/>
+## 실행 방법
 
-## 📂 폴더 구조
-```text
-📦 src
- ┣ 📂 api         # Axios 인스턴스 및 비동기 통신 함수
- ┣ 📂 assets      # 로고, 아이콘, 이미지 등 정적 리소스
- ┣ 📂 components  # 재사용 가능한 UI
- ┣ 📂 pages       # 라우터에 연결되는 페이지 컴포넌트
- ┗ 📂 styles      # 전역 스타일
+```bash
+npm install
+npm run dev
 ```
 
-<br />
+프로덕션 빌드:
 
-## 👥 팀 구성
+```bash
+npm run build
+```
 
-<table border="0">
-  <tbody>
-    <tr>
-      <td align="center">
-          <img src="https://github.com/github.png" width="80px;" alt=""/><br />
-          <sub><b>김지유/무역학부</b></sub> <br />
-        PM
-      </td>
-      <td align="center">
-        <a href="https://github.com/jiin-jung">
-          <img src="https://github.com/jiin-jung.png" width="80px;" alt=""/><br />
-          <sub><b>정지인/정보통신공학과</b></sub>
-        </a><br />
-        Design
-      </td>
-      <td align="center">
-        <a href="https://github.com/namyoon0418">
-          <img src="https://github.com/namyoon0418.png" width="80px;" alt=""/><br />
-          <sub><b>김남윤/정보통신공학과</b></sub>
-        </a><br />
-        Frontend
-      </td>
-      <td align="center">
-        <a href="https://github.com/sh2624">
-          <img src="https://github.com/sh2624.png" width="80px;" alt=""/><br />
-          <sub><b>임상현/영어영문학과</b></sub>
-        </a><br />
-        Frontend
-      </td>
-      <td align="center">
-        <a href="https://github.com/yim0327">
-          <img src="https://github.com/yim0327.png" width="80px;" alt=""/><br />
-          <sub><b>임재영/정보통신공학과</b></sub>
-        </a><br />
-        Backend
-      </td>
-      <td align="center">
-        <a href="https://github.com/sujincyan">
-          <img src="https://github.com/sujincyan.png" width="80px;" alt=""/><br />
-          <sub><b>조수진/전자공학부</b></sub>
-        </a><br />
-        Backend
-      </td>
-    </tr>
-  </tbody>
-</table>
+API 연동 기능을 실행하려면 백엔드 서버 및 프로젝트 환경 설정이 필요할 수 있습니다.
 
+## 프로젝트 구조
 
-© 2026 LikeLion INU. All rights reserved.
+```text
+src/
+  api/          API 요청
+  assets/       이미지 및 정적 리소스
+  components/   공통 UI 컴포넌트
+  pages/        화면 컴포넌트
+  styles/       스타일
+```
+
+## 팀 구성
+
+| 역할     | 팀원                                                                          |
+| -------- | ----------------------------------------------------------------------------- |
+| PM       | 김지유                                                                        |
+| Design   | [정지인](https://github.com/jiin-jung)                                        |
+| Frontend | [김남윤](https://github.com/namyoon0418), [임상현](https://github.com/sh2624) |
+| Backend  | [임재영](https://github.com/yim0327), [조수진](https://github.com/sujincyan)  |
+
+## 관련 링크
+
+- [웹 서비스](https://www.oreumm.site)
+- [프로젝트 소개 자료](https://drive.google.com/file/d/1PSVO96uw7UohAeXVdN6iKzYTZn_i9GnI/view?usp=sharing)
+- [백엔드 저장소](https://github.com/LikeLionUniv-INU-oreum/oreum-backend)
